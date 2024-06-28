@@ -4,7 +4,7 @@ import { GlobalContext } from "../../context";
 
 export default function Navbar() {
 
-    const {searchParam, setSearchParam} = useContext(GlobalContext);
+    const {searchParam, setSearchParam, handleSubmit} = useContext(GlobalContext);
 
     console.log(searchParam);
 
@@ -13,7 +13,7 @@ export default function Navbar() {
         <h2 className="text-2xl font-semibold">
           <NavLink to={'/'}>FoodRecipe</NavLink>
         </h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <input 
             type="text"
             name="search"
