@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const GlobalContext = createContext(null);
 
@@ -8,6 +8,19 @@ export default function GlobalState({ children }) {
     const [recipeList, setRecipeList] = useState([]);
     const [recipeDetailsData, setRecipeDetailsData] = useState(null);
     const [favoritesList, setFavoritesList] = useState([]);
+
+    // Load favorites from localStorage on component mount
+    useEffect(() => {
+        const storedFavorites = localStorage.getItem('favoritesList');
+        if (storedFavorites) {
+            setFavoritesList(JSON.parse(storedFavorites));
+        }
+    }, []);
+
+    // Save favorites to localStorage whenever favoritesList changes
+    useEffect(() => {
+        localStorage.setItem('favoritesList', JSON.stringify(favoritesList));
+    }, [favoritesList]);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -40,11 +53,22 @@ export default function GlobalState({ children }) {
             newFavoritesList.splice(index, 1);
         }
 
-        setFavoritesList(newFavoritesList);
+        setFavoritesList(newFavoritesList); // Update state
+        localStorage.setItem('favoritesList', JSON.stringify(newFavoritesList)); // Update localStorage
     }
 
     return (
-        <GlobalContext.Provider value={{ searchParam, loading, recipeList, setSearchParam, handleSubmit, recipeDetailsData, setRecipeDetailsData, handleAddToFavorite, favoritesList }}>
+        <GlobalContext.Provider value={{ 
+            searchParam, 
+            loading, 
+            recipeList, 
+            setSearchParam, 
+            handleSubmit, 
+            recipeDetailsData, 
+            setRecipeDetailsData, 
+            handleAddToFavorite, 
+            favoritesList 
+        }}>
             {children}
         </GlobalContext.Provider>
     );
