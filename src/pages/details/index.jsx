@@ -4,7 +4,7 @@ import { GlobalContext } from "../../context";
 
 export default function Details() {
     const { id } = useParams();
-    const { setRecipeDetailsData, handleAddToFavorite } = useContext(GlobalContext);
+    const { setRecipeDetailsData, handleAddToFavorite, favoritesList } = useContext(GlobalContext);
     const [recipeDetailsData, setLocalRecipeDetailsData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -33,6 +33,8 @@ export default function Details() {
     if (loading) return <div className="container mx-auto py-10">Loading...</div>;
     if (error) return <div className="container mx-auto py-10">{error}</div>;
 
+    const isFavorite = favoritesList.some(item => item.id === recipeDetailsData?.id);
+
     return (
         <div className="container mx-auto py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div className="lg:col-start-1 lg:col-end-2">
@@ -48,7 +50,12 @@ export default function Details() {
                 <div className="mt-5">
                     <h1 className="text-3xl font-bold text-black">{recipeDetailsData?.title}</h1>
                     <div>
-                        <button onClick={() => handleAddToFavorite(recipeDetailsData)} className="p-3 px-8 rounded-lg text-sm uppercase font-medium tracking-wider mt-3 inline-block shadow-md bg-black text-white">Save as favorites</button>
+                        <button
+                            onClick={() => handleAddToFavorite(recipeDetailsData)}
+                            className="p-3 px-8 rounded-lg text-sm uppercase font-medium tracking-wider mt-3 inline-block shadow-md bg-black text-white"
+                        >
+                            {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+                        </button>
                     </div>
                     <div className="mt-5">
                         <span className="text-2xl font-semibold text-black">
