@@ -36,12 +36,6 @@ export default function Navbar() {
             </NavLink>
         </li>
 
-        <li>
-            <NavLink to={'/'} className='text-black hover:text-gray-700 duration-300'>
-                Home
-            </NavLink>
-        </li>
-
         </ul>
       </nav>
     );
